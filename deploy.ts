@@ -11,15 +11,14 @@ async function main() {
         instance,
         1000,
         'Deploy a smart contract',
-        'tests5'
+        'tests6'
     )
     console.log('deployed', deployTX.txid)
-    const contracts = await listContracts('tests5', (lockingScript: string) => {
+    const contracts = await listContracts('tests6', (lockingScript: string) => {
         return Demo.fromLockingScript(lockingScript) as Demo
     })
     console.log('listed', contracts)
     const redeemHydrator = (self: SmartContract): void => {
-        debugger
         const bsvtx = new bsv.Transaction()
         bsvtx.from(
             {
@@ -33,11 +32,14 @@ async function main() {
         const signature = bsv.Transaction.Sighash.sign(
             bsvtx,
             key,
-            bsv.crypto.Signature.SIGHASH_NONE | bsv.crypto.Signature.SIGHASH_ANYONECANPAY,
+            bsv.crypto.Signature.SIGHASH_NONE | bsv.crypto.Signature.SIGHASH_ANYONECANPAY | bsv.crypto.Signature.SIGHASH_FORKID,
             0,
             bsv.Script.fromBuffer(Buffer.from(contracts[0].outputScript, 'hex')),
             new bsv.crypto.BN(parseInt(String(contracts[0].amount)))
         )
+        console.log(signature)
+        console.log(signature.toTxFormat().toString('hex'))
+        console.log(Sig(toByteString(signature.toTxFormat().toString('hex'))))
         self.to = {
             tx: bsvtx,
             inputIndex: 0
