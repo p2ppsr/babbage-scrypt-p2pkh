@@ -1,6 +1,10 @@
 import { P2PKH as Demo } from './src/contracts/demo'
 import { bsv, SmartContract, Addr, Sig, PubKey, toByteString } from 'scrypt-ts'
-import { deployContract, listContracts, redeemContract } from 'babbage-scrypt-helpers'
+import {
+    deployContract,
+    listContracts,
+    redeemContract,
+} from 'babbage-scrypt-helpers'
 import { getPublicKey, createSignature } from '@babbage/sdk-ts'
 import crypto from 'crypto'
 
@@ -8,8 +12,8 @@ async function main() {
     const keyID = crypto.randomBytes(32).toString('base64')
     await Demo.compile()
     const publicKey = await getPublicKey({
-        protocolID: 'demo',
-        keyID
+        protocolID: 'demos',
+        keyID,
     })
     const address = bsv.PublicKey.fromString(publicKey).toAddress()
     const instance = new Demo(Addr(address.toByteString()))
@@ -32,28 +36,37 @@ async function main() {
             txId: contracts[0].txid,
             outputIndex: contracts[0].vout,
             script: contracts[0].outputScript,
-            satoshis: contracts[0].amount
+            satoshis: contracts[0].amount,
         })
 
-        const hashType = bsv.crypto.Signature.SIGHASH_NONE | bsv.crypto.Signature.SIGHASH_ANYONECANPAY | bsv.crypto.Signature.SIGHASH_FORKID
-        const hashbuf = bsv.crypto.Hash.sha256(bsv.Transaction.Sighash.sighashPreimage(
-            bsvtx,
-            hashType,
-            0,
-            bsv.Script.fromBuffer(Buffer.from(contracts[0].outputScript, 'hex')),
-            new bsv.crypto.BN(parseInt(String(contracts[0].amount)))
-        ))
+        const hashType =
+            bsv.crypto.Signature.SIGHASH_NONE |
+            bsv.crypto.Signature.SIGHASH_ANYONECANPAY |
+            bsv.crypto.Signature.SIGHASH_FORKID
+        const hashbuf = bsv.crypto.Hash.sha256(
+            bsv.Transaction.Sighash.sighashPreimage(
+                bsvtx,
+                hashType,
+                0,
+                bsv.Script.fromBuffer(
+                    Buffer.from(contracts[0].outputScript, 'hex')
+                ),
+                new bsv.crypto.BN(parseInt(String(contracts[0].amount)))
+            )
+        )
         const SDKSignature = await createSignature({
-            protocolID: 'demo',
+            protocolID: 'demos',
             keyID: contracts[0].customInstructions as string,
-            data: hashbuf
+            data: hashbuf,
         })
-        const signature = bsv.crypto.Signature.fromString(Buffer.from(SDKSignature).toString('hex'))
+        const signature = bsv.crypto.Signature.fromString(
+            Buffer.from(SDKSignature).toString('hex')
+        )
         signature.nhashtype = hashType
 
         self.to = {
             tx: bsvtx,
-            inputIndex: 0
+            inputIndex: 0,
         }
         instance.unlock(
             Sig(toByteString(signature.toTxFormat().toString('hex'))),
