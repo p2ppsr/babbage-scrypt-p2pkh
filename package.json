@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "A demo sCrypt smart contract.",
   "author": "",
+  "main": "dist/deploy.js",
   "scripts": {
     "prebuild": "npm run clean",
     "build": "tsc",
@@ -29,15 +30,17 @@
   },
   "dependencies": {
     "@babbage/sdk": "^0.4.43",
-    "@babbage/sdk-ts": "^0.1.4",
+    "@babbage/sdk-ts": "^0.1.7",
     "babbage-scrypt-helpers": "^1.0.0",
     "dotenv": "^16.0.3",
-    "scrypt-ts": "latest"
+    "scrypt-ts": "latest",
+    "whatsonchain": "^0.3.0"
   },
   "devDependencies": {
-    "@types/chai": "^4.3.4",
+    "@types/chai": "^4.3.11",
     "@types/chai-as-promised": "^7.1.5",
-    "@types/mocha": "^10.0.0",
+    "@types/jest": "^29.5.12",
+    "@types/mocha": "^10.0.6",
     "@types/node": "^18.11.10",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",
@@ -47,10 +50,12 @@
     "eslint": "^8.48.0",
     "eslint-config-prettier": "^8.6.0",
     "husky": "^8.0.3",
+    "jest": "^29.7.0",
     "lint-staged": "^13.1.0",
     "mocha": "^10.1.0",
     "prettier": "^2.8.2",
     "rimraf": "^3.0.2",
+    "ts-jest": "^29.1.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   },
