@@ -28,8 +28,8 @@
     ]
   },
   "dependencies": {
-    "@babbage/sdk-ts": "^0.2.53",
-    "babbage-scrypt-helpers": "^1.0.32",
+    "@babbage/sdk-ts": "^0.2.54",
+    "babbage-scrypt-helpers": "^1.0.33",
     "dotenv": "^16.0.3",
     "scrypt-ts": "latest"
   },
